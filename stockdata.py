@@ -51,9 +51,9 @@ class Kiwoom:
         exclude_status = ["관리", "정지", "환기", "정리", "불성실", "유의"]
         if any(s in status for s in exclude_status):
             return False
-        # 3. 종목 구분 필터링(4:관리종목, 6:증거금100, 12:초저유동성)
+        # 3. 종목 구분 필터링(6:증거금100, 12:초저유동성)
         construction = self.ocx.dynamicCall("GetConstructionType(QString)", [code])
-        if construction in ["4", "6", "12"]:
+        if construction in ["6", "12"]:
             return False
         return True
 
@@ -97,7 +97,7 @@ class Kiwoom:
                 "volume": int(volume)
             })
 
-        self.tr_data = result[:240]  # 최대 240개만 저장
+        self.tr_data = result[:360]  # 최대 (360개)만 저장
         self.data_ready = True
 
 

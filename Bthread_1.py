@@ -5,9 +5,9 @@ from PyQt5.QtWidgets import *      # 기능사용을 위해 불러온다
 
 
 class Thread1(QThread):
-    def __init__(self, parent):   # 메인 화면, 즉 부모의 윈도우 창을 가져오자
-        super().__init__(parent)  # 부모의 윈도우 창을 초기화 하고 시작하자
-        self.parent = parent      # 부모의 윈도우를 사용하기 위해 작업해야지
+    def __init__(self, parent):   # 메인 화면, 즉 부모(BULL_Brain)의 윈도우 창을 가져오자
+        super().__init__(parent)  # 부모(BULL_Brain)의 윈도우 창을 초기화 하고 시작하자
+        self.parent = parent      # 부모(BULL_Brain)의 윈도우를 사용하기 위해 작업해야지
 
 
         #처음에는 키움증권 함수르 사용을 해야하니 Kiwoom 능력 상속 필요.
@@ -19,13 +19,13 @@ class Thread1(QThread):
 
         ###### 슬롯
         self.k.kiwoom.OnReceiveTrData.connect(self.trdata_slot)  #  #trdata_slot을 설정하고 여기에 데이터를 던진다
-        ###### EventLoop
 
+        ###### EventLoop
         self.detail_account_info_event_loop = QEventLoop()  # 계좌 이벤트루프
 
         ###### 계좌정보 가져오기
         self.getItemList()               # 종목 이름 받아오기
-        self.detail_acount_mystock()     # 계좌평가잔고내역 가져오기
+        self.detail_account_mystock()     # 계좌평가잔고내역 가져오기
 
 
     def getItemList(self):
@@ -38,7 +38,8 @@ class Thread1(QThread):
                 name = self.k.kiwoom.dynamicCall("GetMasterCodeName(QString)", code)
                 self.k.All_Stock_Code.update({code: {"종목명": name}})
 
-    def detail_acount_mystock(self, sPrevNext="0"):
+
+    def detail_account_mystock(self, sPrevNext="0"):
 
         print("계좌평가잔고내역 조회")
         account = self.parent.BULLacc.currentText()  # ui에서 생성했던 콤보박스 안에서 가져오는 부분
@@ -120,7 +121,7 @@ class Thread1(QThread):
                 self.parent.BULLstockTableWidget_1.setItem(index, 6, QTableWidgetItem(str(format(profitRate, ","))))
 
             if sPrevNext == "2":
-                self.detail_acount_mystock(sPrevNext="2")  # 다음 페이지가 있으면 전부 검색한다.
+                self.detail_account_mystock(sPrevNext="2")  # 다음 페이지가 있으면 전부 검색한다.
             else:
                 self.detail_account_info_event_loop.exit()  # 끊어 준다.
 
